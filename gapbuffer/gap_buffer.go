@@ -20,8 +20,8 @@ func (b *GapBuffer) String() string {
 
 func (b *GapBuffer) Insert(s string) {
 	r := []rune(s)
-	if len(r) > b.GapSize() {
-		// TBD
+	for len(r) > b.GapSize() {
+		b.Grow(len(b.Buf) * 2)
 	}
 	for i := 0; i < len(r); i++ {
 		b.Buf[b.GapLeft] = r[i]
