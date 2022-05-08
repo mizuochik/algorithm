@@ -14,42 +14,61 @@ func TestGapBuffer(t *testing.T) {
 			size        int
 			initString  string
 			cursor      int
-			inputString int
+			inputString string
 			wantString  string
 			wantCursor  int
 		}{
 			{
-				desc:       "shorter than size",
-				size:       10,
-				initString: "ab",
-				wantString: "ab",
-				wantCursor: 2,
+				desc:        "shorter than size",
+				size:        10,
+				initString:  "ab",
+				cursor:      0,
+				inputString: "",
+				wantString:  "ab",
+				wantCursor:  0,
 			},
 			{
-				desc:       "same as size",
-				size:       2,
-				initString: "ab",
-				wantString: "ab",
-				wantCursor: 2,
+				desc:        "same as size",
+				size:        2,
+				initString:  "ab",
+				cursor:      0,
+				inputString: "",
+				wantString:  "ab",
+				wantCursor:  0,
 			},
 			{
-				desc:       "longer than size",
-				size:       2,
-				initString: "abc",
-				wantString: "abc",
-				wantCursor: 3,
+				desc:        "longer than size",
+				size:        2,
+				initString:  "abc",
+				cursor:      0,
+				inputString: "",
+				wantString:  "abc",
+				wantCursor:  0,
 			},
 			{
-				desc:       "much longer than size",
-				size:       2,
-				initString: "abcdefghijklmn",
-				wantString: "abcdefghijklmn",
-				wantCursor: 14,
+				desc:        "much longer than size",
+				size:        2,
+				initString:  "abcdefghijklmn",
+				cursor:      0,
+				inputString: "",
+				wantString:  "abcdefghijklmn",
+				wantCursor:  0,
+			},
+			{
+				desc:        "between words",
+				size:        2,
+				initString:  "hello world",
+				cursor:      5,
+				inputString: " bye",
+				wantString:  "hello bye world",
+				wantCursor:  9,
 			},
 		}
 		for _, tt := range tests {
 			gb := gapbuffer.New(tt.size)
 			gb.Insert(tt.initString)
+			gb.SetCursor(tt.cursor)
+			gb.Insert(tt.inputString)
 			if diff := cmp.Diff(tt.wantString, gb.String()); diff != "" {
 				t.Errorf("%s: %s", tt.desc, diff)
 			}
