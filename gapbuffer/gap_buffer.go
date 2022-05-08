@@ -54,3 +54,17 @@ func (b *GapBuffer) SetCursor(pos int) {
 		}
 	}
 }
+
+func (b *GapBuffer) Grow(newSize int) {
+	oldSize := len(b.Buf)
+	newGapRight := b.GapRight + (newSize - oldSize)
+	newBuf := make([]rune, newSize)
+	for i := 0; i < b.GapLeft; i++ {
+		newBuf[i] = b.Buf[i]
+	}
+	for i := 0; i < len(b.Buf[b.GapRight:]); i++ {
+		newBuf[newGapRight+i] = b.Buf[b.GapRight+1]
+	}
+	b.Buf = newBuf
+	b.GapRight = newGapRight
+}

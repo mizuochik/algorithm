@@ -56,4 +56,21 @@ func TestGapBuffer(t *testing.T) {
 			}
 		}
 	})
+
+	t.Run("Grow()", func(t *testing.T) {
+		tests := []struct {
+			desc     string
+			s        string
+			initSize int
+			growSize int
+		}{}
+		for _, tt := range tests {
+			gb := gapbuffer.New(tt.initSize)
+			gb.Insert(tt.s)
+			gb.Grow(tt.growSize)
+			if diff := cmp.Diff(tt.s, gb.String()); diff != "" {
+				t.Errorf("string changed/%s: %s", tt.desc, diff)
+			}
+		}
+	})
 }
