@@ -32,3 +32,25 @@ func (b *GapBuffer) Insert(s string) {
 func (b *GapBuffer) GapSize() int {
 	return b.GapRight - b.GapLeft
 }
+
+func (b *GapBuffer) Cursor() int {
+	return b.GapLeft
+}
+
+func (b *GapBuffer) SetCursor(pos int) {
+	if pos > b.GapLeft {
+		l := pos - b.GapLeft
+		for i := 0; i < l; i++ {
+			b.Buf[b.GapLeft] = b.Buf[b.GapRight]
+			b.GapLeft++
+			b.GapRight++
+		}
+	} else if pos < b.GapLeft {
+		l := b.GapLeft - pos
+		for i := 0; i < l; i++ {
+			b.Buf[b.GapRight-1] = b.Buf[b.GapLeft-1]
+			b.GapLeft--
+			b.GapRight--
+		}
+	}
+}

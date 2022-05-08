@@ -29,4 +29,31 @@ func TestGapBuffer(t *testing.T) {
 			}
 		}
 	})
+
+	t.Run("SetCursor()", func(t *testing.T) {
+		tests := []struct {
+			desc   string
+			size   int
+			s      string
+			cursor int
+		}{
+			{
+				desc:   "go to head",
+				size:   10,
+				s:      "foobar",
+				cursor: 0,
+			},
+		}
+		for _, tt := range tests {
+			gb := gapbuffer.New(tt.size)
+			gb.Insert(tt.s)
+			gb.SetCursor(tt.cursor)
+			if diff := cmp.Diff(tt.cursor, gb.Cursor()); diff != "" {
+				t.Errorf("%s/cursor: %s", tt.desc, diff)
+			}
+			if diff := cmp.Diff(tt.s, gb.String()); diff != "" {
+				t.Errorf("%s/string: %s", tt.desc, diff)
+			}
+		}
+	})
 }
